@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-nunito);
+  --font-fredoka: var(--font-fredoka);
+  --font-mono: var(--font-space-mono);
+  --leading-tight: 1em;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Brand colors — from official Monstir brand kit */
+  --color-brand-purple:       #7B3FF2;
+  --color-brand-purple-dark:  #6230D4;
+  --color-brand-purple-light: #C8BCFF;
+  --color-slime-lime:         #D8F52F;
+  --color-deep-ink:           #111111;
+  --color-soft-cream:         #FFFDF7;
+  --color-gold-coin:          #FFC928;
+  --color-sky-blue:           #BEEBFF;
+  --color-mint:               #D9F7D6;
+  --color-peach:              #FFD7C8;
+
+  /* Legacy aliases kept for backward compat */
+  --color-brand-yellow:       #FFC928;
+  --color-brand-yellow-dark:  #E8B820;
+  --color-brand-green:        #6BBF23;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #FFFDF7;
+  color: #111111;
 }
