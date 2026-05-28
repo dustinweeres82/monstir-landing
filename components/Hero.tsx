@@ -123,7 +123,7 @@ export default function Hero() {
       <div
         ref={el => { layerRefs.current[1] = el; }}
         className="hidden md:block absolute will-change-transform pointer-events-none"
-        style={{ left: 0, right: 0, bottom: -210 }}
+        style={{ left: 0, right: 0, bottom: -180 }}
       >
         <img src="/hero/hero-ground.png" alt="" className="w-full h-auto" />
       </div>
@@ -163,7 +163,7 @@ export default function Hero() {
           <div>
             <a
               href="#waitlist"
-              className="inline-flex items-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-base px-7 py-4 rounded-full transition-colors shadow-lg shadow-brand-purple/30"
+              className="inline-flex items-center gap-2 bg-slime-lime hover:bg-[#c4e020] text-deep-ink font-bold text-base px-7 py-4 rounded-full transition-colors shadow-lg shadow-slime-lime/40 border-2 border-deep-ink"
             >
               <span>✦</span>
               Join the waitlist

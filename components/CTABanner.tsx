@@ -46,11 +46,11 @@ export default function CTABanner() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-5 py-3 rounded-full bg-white text-gray-900 placeholder-gray-400 font-semibold text-sm outline-none focus:ring-2 focus:ring-white w-full sm:w-60 shadow-sm"
+            className="px-5 py-3 rounded-full bg-white text-gray-900 placeholder-gray-400 font-semibold text-sm outline-none focus:ring-2 focus:ring-white w-full sm:w-60 shadow-sm border-2 border-deep-ink"
           />
           <button
             type="submit"
-            className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-3 rounded-full transition-colors whitespace-nowrap shadow-md"
+            className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-3 rounded-full transition-colors whitespace-nowrap shadow-md border-2 border-deep-ink"
           >
             <span>✦</span>
             Join the waitlist

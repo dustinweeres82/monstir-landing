@@ -36,7 +36,7 @@ export default function Navbar() {
 
         <a
           href="#waitlist"
-          className="hidden md:flex items-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-2.5 rounded-full transition-colors"
+          className="hidden md:flex items-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-2.5 rounded-full transition-colors border-2 border-deep-ink"
         >
           <span>✦</span>
           Join the waitlist
@@ -73,7 +73,7 @@ export default function Navbar() {
           ))}
           <a
             href="#waitlist"
-            className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-3 rounded-full transition-colors mt-2"
+            className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-3 rounded-full transition-colors mt-2 border-2 border-deep-ink"
             onClick={() => setOpen(false)}
           >
             <span>✦</span>

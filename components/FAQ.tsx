@@ -135,7 +135,7 @@ export default function FAQ() {
           {/* CTA */}
           <a
             href="mailto:hello@monstir.com"
-            className="shrink-0 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-3 rounded-full transition-colors whitespace-nowrap"
+            className="shrink-0 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-3 rounded-full transition-colors whitespace-nowrap border-2 border-deep-ink"
           >
             Contact us
           </a>
