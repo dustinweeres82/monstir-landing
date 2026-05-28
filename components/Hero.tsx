@@ -3,63 +3,135 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
+// Per-layer: gyro max px offset, scroll translateY multiplier
+const GYRO_FACTOR = [5, 10, 18, 28, 38, 52];
+const SCROLL_FACTOR = [0.04, 0.08, 0.14, 0.20, 0.28, 0.38];
+
 export default function Hero() {
-  const imageRef = useRef<HTMLDivElement>(null);
-  const decoStarRef = useRef<HTMLDivElement>(null);
-  const decoStar2Ref = useRef<HTMLDivElement>(null);
-  const decoHeartRef = useRef<HTMLDivElement>(null);
-  const decoHeartSmRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const layerRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null, null, null]);
   const copyRef = useRef<HTMLDivElement>(null);
+  const pointerRef = useRef({ x: 0, y: 0 });
+  const scrollRef = useRef(0);
 
   useEffect(() => {
     let ticking = false;
 
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
+    const apply = () => {
+      const { x, y } = pointerRef.current;
+      const sy = scrollRef.current;
 
-        // Main image: floats up at 0.25× scroll
-        if (imageRef.current) {
-          imageRef.current.style.transform = `translateY(${y * -0.25}px)`;
-        }
-        // Deco icons: different speeds for depth
-        if (decoStarRef.current) {
-          decoStarRef.current.style.transform = `translateY(${y * -0.15}px) rotate(${y * 0.04}deg)`;
-        }
-        if (decoStar2Ref.current) {
-          decoStar2Ref.current.style.transform = `translateY(${y * -0.35}px) rotate(${y * -0.05}deg)`;
-        }
-        if (decoHeartRef.current) {
-          decoHeartRef.current.style.transform = `translateY(${y * -0.20}px)`;
-        }
-        if (decoHeartSmRef.current) {
-          decoHeartSmRef.current.style.transform = `translateY(${y * -0.10}px)`;
-        }
-        // Copy: subtle fade + slide out
-        if (copyRef.current) {
-          const progress = Math.min(y / 400, 1);
-          copyRef.current.style.transform = `translateY(${y * -0.08}px)`;
-          copyRef.current.style.opacity = String(1 - progress * 0.35);
-        }
-
-        ticking = false;
+      layerRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const tx = x * GYRO_FACTOR[i];
+        const ty = y * GYRO_FACTOR[i] - sy * SCROLL_FACTOR[i];
+        el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
       });
+
+      if (copyRef.current) {
+        const progress = Math.min(sy / 400, 1);
+        copyRef.current.style.transform = `translateY(${sy * -0.05}px)`;
+        copyRef.current.style.opacity = String(1 - progress * 0.3);
+      }
+
+      ticking = false;
+    };
+
+    const schedule = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(apply);
+      }
+    };
+
+    const onScroll = () => {
+      scrollRef.current = window.scrollY;
+      schedule();
+    };
+
+    const onOrientation = (e: DeviceOrientationEvent) => {
+      pointerRef.current.x = Math.max(-1, Math.min(1, (e.gamma ?? 0) / 25));
+      pointerRef.current.y = Math.max(-1, Math.min(1, ((e.beta ?? 45) - 45) / 25));
+      schedule();
+    };
+
+    const addGyroListener = () => {
+      window.addEventListener("deviceorientation", onOrientation, { passive: true });
+    };
+
+    const onFirstTouch = async () => {
+      if (
+        typeof DeviceOrientationEvent !== "undefined" &&
+        typeof (DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> }).requestPermission === "function"
+      ) {
+        try {
+          const perm = await (DeviceOrientationEvent as unknown as { requestPermission: () => Promise<string> }).requestPermission();
+          if (perm === "granted") addGyroListener();
+        } catch {
+          // permission denied
+        }
+      } else {
+        addGyroListener();
+      }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("touchstart", onFirstTouch, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("touchstart", onFirstTouch);
+      window.removeEventListener("deviceorientation", onOrientation);
+    };
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-white pt-12 pb-0">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-8">
-        {/* Left column */}
+    <section
+      ref={sectionRef}
+      className="relative z-10 -mt-16 min-h-screen"
+      style={{ background: "linear-gradient(to bottom, #b8d8f0 0%, #cce5f5 40%, #dff0f8 100%)" }}
+    >
+      {/* ── Parallax layers (full-width, absolutely stacked) ── */}
+
+      {/* Layer 0: background landscape */}
+      <div
+        ref={el => { layerRefs.current[0] = el; }}
+        className="absolute will-change-transform pointer-events-none"
+        style={{ inset: "-372px -170px -61px -500px", overflow: "hidden", filter: "blur(3px)" }}
+      >
+        <img src="/hero/hero-bg.png" alt="" className="w-full h-auto" />
+      </div>
+
+      {/* Layer 3: phone */}
+      <div
+        ref={el => { layerRefs.current[3] = el; }}
+        className="hero-phone absolute will-change-transform pointer-events-none"
+      >
+        <img src="/hero/hero-phone.png" alt="Monstir app showing The Junk Giant boss battle" className="w-full h-auto" />
+      </div>
+
+      {/* Layer 1: ground strip — above phone */}
+      <div
+        ref={el => { layerRefs.current[1] = el; }}
+        className="absolute will-change-transform pointer-events-none"
+        style={{ left: 0, right: 0, bottom: -210 }}
+      >
+        <img src="/hero/hero-ground.png" alt="" className="w-full h-auto" />
+      </div>
+
+      {/* Layer 5: BITBOT — closest layer, moves most */}
+      <div
+        ref={el => { layerRefs.current[5] = el; }}
+        className="hero-bitbot absolute will-change-transform pointer-events-none"
+      >
+        <img src="/hero/hero-bitbot.png" alt="BITBOT" className="w-full h-auto" />
+      </div>
+
+      {/* ── Copy overlay (left side) ── */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center min-h-screen">
         <div
           ref={copyRef}
-          className="flex-1 flex flex-col gap-6 max-w-xl will-change-transform"
-          style={{ transformOrigin: "top left" }}
+          className="flex flex-col gap-6 max-w-md will-change-transform pt-16 pb-12"
         >
           <div className="flex items-center gap-2">
             <Image src="/deco-star.png" alt="" width={20} height={20} className="mix-blend-multiply" />
@@ -69,11 +141,7 @@ export default function Hero() {
           </div>
 
           <h1 className="text-5xl lg:text-6xl font-bold font-fredoka leading-tight">
-            Getting kids
-            <br />
-            to do chores
-            <br />
-            <span className="text-brand-purple italic">without the fight.</span>
+            Turn chores into <span className="text-brand-purple italic">adventures.</span>
           </h1>
 
           <p className="text-lg text-gray-700 leading-relaxed">
@@ -94,52 +162,6 @@ export default function Hero() {
             </a>
           </div>
 
-          <div className="flex items-start gap-4 mt-2">
-            <div className="w-12 h-12 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-              <div className="w-full h-full bg-gradient-to-br from-amber-300 to-amber-500" />
-            </div>
-            <div>
-              <div className="flex gap-0.5 mb-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-sm">★</span>
-                ))}
-              </div>
-              <p className="text-sm text-gray-700 font-semibold leading-snug">
-                &ldquo;My 8-year-old asked to do extra chores to beat the boss this week.&rdquo;
-              </p>
-              <p className="text-xs text-gray-500 mt-1">– Sarah M., mom of 2</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Right column */}
-        <div className="flex-1 relative flex items-end justify-center">
-          {/* Deco — each drifts at its own speed */}
-          <div ref={decoStarRef} className="absolute top-8 left-4 select-none will-change-transform">
-            <Image src="/deco-star.png" alt="" width={28} height={28} className="mix-blend-multiply" />
-          </div>
-          <div ref={decoStar2Ref} className="absolute top-28 right-8 select-none will-change-transform">
-            <Image src="/deco-star.png" alt="" width={18} height={18} className="mix-blend-multiply opacity-60" />
-          </div>
-          <div ref={decoHeartRef} className="absolute top-6 right-24 select-none will-change-transform">
-            <Image src="/deco-heart-bubble.png" alt="" width={48} height={48} className="mix-blend-multiply" />
-          </div>
-          <div ref={decoHeartSmRef} className="absolute bottom-32 left-8 select-none will-change-transform">
-            <Image src="/deco-heart.png" alt="" width={28} height={28} className="mix-blend-multiply opacity-50" />
-          </div>
-
-          {/* Hero image */}
-          <div ref={imageRef} className="relative z-10 will-change-transform w-full">
-            <Image
-              src="/hero.png"
-              alt="Monstir app showing The Junk Giant boss battle with BITBOT"
-              width={567}
-              height={547}
-              priority
-              unoptimized
-              className="w-full"
-            />
-          </div>
         </div>
       </div>
     </section>

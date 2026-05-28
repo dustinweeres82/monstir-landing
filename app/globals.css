@@ -28,3 +28,19 @@ body {
   background: #FFFDF7;
   color: #111111;
 }
+
+/* Hero scene element positioning — top-right at all sizes, scales with viewport width */
+.hero-phone {
+  top: 10%;
+  right: 20%;
+  bottom: auto;
+  left: auto;
+  width: 30%;
+}
+
+.hero-bitbot {
+  right: 7%;
+  top: 13%;
+  bottom: auto;
+  width: 28%;
+}
