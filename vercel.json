@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "monstirapp.com" }],
+      "destination": "https://www.monstirapp.com/$1",
+      "permanent": true
+    }
+  ]
+}
