@@ -50,8 +50,8 @@ function TestimonialCard({
   return (
     <div
       ref={ref}
-      style={{ transitionDelay: `${index * 120}ms` }}
-      className={`bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all duration-700 ${
+      style={{ transitionDelay: `${index * 120}ms`, border: "3px solid #111111", boxShadow: "0px 6px 0px #111111" }}
+      className={`bg-white rounded-[18px] p-6 transition-all duration-700 ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
     >
