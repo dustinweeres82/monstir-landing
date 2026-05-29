@@ -5,11 +5,23 @@ import { useState } from "react";
 
 export default function CTABanner() {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Thanks! We'll be in touch at ${email}`);
-    setEmail("");
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -36,26 +48,32 @@ export default function CTABanner() {
         </div>
 
         {/* Email form */}
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0"
-        >
-          <input
-            type="email"
-            required
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="px-5 py-3 rounded-full bg-white text-gray-900 placeholder-gray-400 font-semibold text-sm outline-none focus:ring-2 focus:ring-white w-full sm:w-60 shadow-sm border-2 border-deep-ink"
-          />
-          <button
-            type="submit"
-            className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-3 rounded-full transition-colors whitespace-nowrap shadow-md border-2 border-deep-ink"
+        {status === "success" ? (
+          <p className="font-bold text-deep-ink text-lg">🎉 You&apos;re on the list!</p>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0"
           >
-            <span>✦</span>
-            Join the waitlist
-          </button>
-        </form>
+            <input
+              type="email"
+              required
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="px-5 py-3 rounded-full bg-white text-gray-900 placeholder-gray-400 font-semibold text-sm outline-none focus:ring-2 focus:ring-white w-full sm:w-60 shadow-sm border-2 border-deep-ink"
+            />
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-3 rounded-full transition-colors whitespace-nowrap shadow-md border-2 border-deep-ink disabled:opacity-60"
+            >
+              <span>✦</span>
+              {status === "loading" ? "Joining…" : "Join the waitlist"}
+            </button>
+            {status === "error" && <p className="text-red-600 text-xs mt-1">Something went wrong — try again.</p>}
+          </form>
+        )}
 
         {/* Slime right */}
         <div className="shrink-0 hidden md:block">
