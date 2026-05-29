@@ -31,17 +31,6 @@ export default function WaitlistConfirmation({ email = "friend" }: { email?: str
             />
           </Section>
 
-          {/* Hero */}
-          <Section style={hero}>
-            <Img
-              src="https://www.monstirapp.com/hero/hero-bitbot.png"
-              alt="BITBOT"
-              width="180"
-              height="180"
-              style={{ margin: "0 auto", display: "block" }}
-            />
-          </Section>
-
           {/* Badge */}
           <Section style={{ textAlign: "center", marginBottom: "16px" }}>
             <span style={badge}>✦ QUEST ACCEPTED</span>
@@ -128,10 +117,6 @@ const header: React.CSSProperties = {
   textAlign: "center",
 };
 
-const hero: React.CSSProperties = {
-  padding: "24px 32px 8px",
-  textAlign: "center",
-};
 
 const badge: React.CSSProperties = {
   backgroundColor: "#D4F20C",
