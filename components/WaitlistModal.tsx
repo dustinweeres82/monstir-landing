@@ -37,8 +37,8 @@ export default function WaitlistModal({ onClose }: { onClose: () => void }) {
           <Image
             src="/hero/hero-bitbot.png"
             alt="BITBOT"
-            width={140}
-            height={140}
+            width={220}
+            height={220}
             unoptimized
             className="object-contain hero-float"
           />
