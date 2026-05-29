@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import WaitlistModal from "./WaitlistModal";
 
 export default function CTABanner() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,12 +21,14 @@ export default function CTABanner() {
       if (!res.ok) throw new Error();
       setStatus("success");
       setEmail("");
+      setShowModal(true);
     } catch {
       setStatus("error");
     }
   };
 
   return (
+    <>
     <section id="waitlist" className="bg-slime-lime pt-20 pb-14 overflow-visible relative">
       {/* Treasure chest hanging over the top */}
       <div className="absolute -top-14 left-8 md:left-16 pointer-events-none select-none">
@@ -48,9 +52,7 @@ export default function CTABanner() {
         </div>
 
         {/* Email form */}
-        {status === "success" ? (
-          <p className="font-bold text-deep-ink text-lg">🎉 You&apos;re on the list!</p>
-        ) : (
+        {status === "success" ? null : (
           <form
             onSubmit={handleSubmit}
             className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0"
@@ -81,5 +83,8 @@ export default function CTABanner() {
         </div>
       </div>
     </section>
+
+    {showModal && <WaitlistModal onClose={() => setShowModal(false)} />}
+    </>
   );
 }
