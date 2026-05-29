@@ -39,7 +39,7 @@ export default function WaitlistModal({ onClose }: { onClose: () => void }) {
             width={220}
             height={220}
             unoptimized
-            className="object-contain hero-float w-[130px] md:w-[220px]"
+            className="object-contain hero-float w-[180px] md:w-[220px]"
           />
         </div>
 
