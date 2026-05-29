@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
+import WaitlistConfirmation from "@/emails/WaitlistConfirmation";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const audienceId = process.env.RESEND_AUDIENCE_ID!;
@@ -12,10 +13,15 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await resend.contacts.create({
-      email,
-      audienceId,
-      unsubscribed: false,
+    // Add to audience
+    await resend.contacts.create({ email, audienceId, unsubscribed: false });
+
+    // Send confirmation email
+    await resend.emails.send({
+      from: "BITBOT from Monstir <hello@monstirapp.com>",
+      to: email,
+      subject: "⚔️ Quest accepted — you're on the Monstir waitlist!",
+      react: WaitlistConfirmation({ email }),
     });
 
     return NextResponse.json({ success: true });
