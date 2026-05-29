@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect } from "react";
 
 export default function WaitlistModal({ onClose }: { onClose: () => void }) {
@@ -17,7 +16,7 @@ export default function WaitlistModal({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <div
-        className="relative bg-white rounded-[24px] overflow-hidden max-w-xl w-full flex flex-col md:flex-row items-stretch"
+        className="relative bg-white rounded-[24px] overflow-hidden max-w-sm w-full"
         style={{ border: "3px solid #111111", boxShadow: "0px 8px 0px #111111" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -31,20 +30,7 @@ export default function WaitlistModal({ onClose }: { onClose: () => void }) {
           ✕
         </button>
 
-        {/* BITBOT — top on mobile, left on desktop */}
-        <div className="flex items-end justify-center bg-gray-50 px-6 pt-4 md:pt-6 md:min-w-[200px]">
-          <Image
-            src="/hero/hero-bitbot.png"
-            alt="BITBOT"
-            width={220}
-            height={220}
-            unoptimized
-            className="object-contain hero-float w-[180px] md:w-[220px]"
-          />
-        </div>
-
-        {/* Content — bottom on mobile, right on desktop */}
-        <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
+        <div className="p-8 flex flex-col">
           {/* Badge */}
           <div className="inline-flex items-center gap-1.5 bg-slime-lime text-deep-ink text-xs font-bold font-mono uppercase tracking-widest px-3 py-1.5 rounded-full mb-4 self-start"
             style={{ border: "2px solid #111111" }}>
@@ -55,7 +41,7 @@ export default function WaitlistModal({ onClose }: { onClose: () => void }) {
             You&apos;re on the list!
           </h2>
           <p className="text-gray-500 text-sm leading-relaxed mb-5">
-            BITBOT will personally notify you when Monstir drops. Get ready to turn chores into{" "}
+            We&apos;ll personally notify you when Monstir drops. Get ready to turn chores into{" "}
             <span className="font-bold text-brand-purple">legendary adventures.</span>
           </p>
 
