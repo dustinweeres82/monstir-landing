@@ -97,7 +97,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 -mt-16 md:min-h-screen"
+      className="relative z-10 md:min-h-screen"
       style={{ background: "linear-gradient(to bottom, #b8d8f0 0%, #cce5f5 40%, #dff0f8 100%)" }}
     >
       {/* ── Parallax layers — desktop only ── */}
@@ -106,7 +106,7 @@ export default function Hero() {
       <div
         ref={el => { layerRefs.current[0] = el; }}
         className="hidden md:block absolute will-change-transform pointer-events-none"
-        style={{ inset: "-372px -170px -61px -500px", overflow: "hidden", filter: "blur(3px)" }}
+        style={{ inset: "-600px -170px -61px -500px", overflow: "hidden", filter: "blur(3px)" }}
       >
         <img src="/hero/hero-bg.png" alt="" className="w-full h-full object-cover object-top" />
       </div>

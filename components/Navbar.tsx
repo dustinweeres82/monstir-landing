@@ -3,13 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const navLinks = ["How it works", "Features", "Monsters", "Parents", "FAQs"];
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/30">
+    <nav className="fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="/" className="flex items-center">
           <Image
@@ -21,18 +19,6 @@ export default function Navbar() {
             priority
           />
         </a>
-
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
-              className="text-gray-600 font-semibold text-sm hover:text-brand-purple transition-colors"
-            >
-              {link}
-            </a>
-          ))}
-        </div>
 
         <a
           href="#waitlist"
@@ -61,16 +47,6 @@ export default function Navbar() {
 
       {open && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
-          {navLinks.map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
-              className="text-gray-700 font-semibold text-base hover:text-brand-purple transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              {link}
-            </a>
-          ))}
           <a
             href="#waitlist"
             className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-3 rounded-full transition-colors mt-2 border-2 border-deep-ink"

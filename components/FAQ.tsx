@@ -107,7 +107,7 @@ export default function FAQ() {
         </div>
 
         {/* Still have questions banner */}
-        <div className="relative bg-brand-purple-light rounded-3xl px-8 py-6 flex items-center gap-6 overflow-hidden">
+        <div className="relative bg-brand-purple-light rounded-3xl px-6 py-6 flex items-center gap-4">
           {/* Deco stars */}
           <Image src="/deco-star.png" alt="" width={16} height={16} className="absolute top-4 left-32 opacity-40 mix-blend-multiply" />
           <Image src="/deco-star.png" alt="" width={12} height={12} className="absolute bottom-5 left-56 opacity-30 mix-blend-multiply" />
@@ -115,7 +115,7 @@ export default function FAQ() {
           <Image src="/deco-star.png" alt="" width={10} height={10} className="absolute bottom-4 right-36 opacity-30 mix-blend-multiply" />
 
           {/* Character */}
-          <div className="shrink-0 -mb-6">
+          <div className="hidden sm:flex shrink-0 items-center">
             <Image
               src="/monster-slime.png"
               alt=""
@@ -134,10 +134,12 @@ export default function FAQ() {
 
           {/* CTA */}
           <a
-            href="mailto:hello@monstir.com"
+            href="https://www.instagram.com/monstirapp"
+            target="_blank"
+            rel="noopener noreferrer"
             className="shrink-0 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-3 rounded-full transition-colors whitespace-nowrap border-2 border-deep-ink"
           >
-            Contact us
+            DM us
           </a>
         </div>
       </div>

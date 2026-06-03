@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Fragment } from "react";
 
 const steps = [
   {
@@ -46,12 +47,11 @@ export default function GameLoop() {
         </h2>
 
         {/* Steps row — arrows are siblings between step divs */}
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-center">
+        <div className="flex flex-col gap-10 md:gap-0 md:flex-row items-center md:items-start justify-center">
           {steps.map((step, i) => (
-            <>
+            <Fragment key={step.number}>
               {/* Step */}
               <div
-                key={step.number}
                 className="flex flex-col items-center text-center gap-3 flex-1 px-2"
               >
                 <span className="w-9 h-9 rounded-full bg-brand-purple-light flex items-center justify-center text-brand-purple font-black text-lg shrink-0">
@@ -87,7 +87,7 @@ export default function GameLoop() {
                   />
                 </div>
               )}
-            </>
+            </Fragment>
           ))}
         </div>
       </div>

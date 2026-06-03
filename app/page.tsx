@@ -5,7 +5,6 @@ import Testimonials from "@/components/Testimonials";
 import Features from "@/components/Features";
 import CTABanner from "@/components/CTABanner";
 import FAQ from "@/components/FAQ";
-import Footer from "@/components/Footer";
 import ParallaxDecorations from "@/components/ParallaxDecorations";
 
 export default function Home() {
@@ -22,7 +21,6 @@ export default function Home() {
           <FAQ />
           <CTABanner />
         </main>
-        <Footer />
       </div>
     </div>
   );
