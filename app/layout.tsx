@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito, Fredoka, Space_Mono } from "next/font/google";
 import "./globals.css";
+import BugsnagProvider from "@/components/BugsnagProvider";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -31,7 +32,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${nunito.variable} ${fredoka.variable} ${spaceMono.variable} antialiased`}>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full"><BugsnagProvider>{children}</BugsnagProvider></body>
     </html>
   );
 }
