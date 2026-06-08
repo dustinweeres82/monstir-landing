@@ -1,8 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import GameLoop from "@/components/GameLoop";
-import Testimonials from "@/components/Testimonials";
+import ProblemSection from "@/components/ProblemSection";
+// import Testimonials from "@/components/Testimonials";
 import Features from "@/components/Features";
+import ForKids from "@/components/ForKids";
+import SafeSection from "@/components/SafeSection";
 import CTABanner from "@/components/CTABanner";
 import FAQ from "@/components/FAQ";
 import ParallaxDecorations from "@/components/ParallaxDecorations";
@@ -15,9 +18,12 @@ export default function Home() {
         <Navbar />
         <main>
           <Hero />
+          <ProblemSection />
           <GameLoop />
-          <Testimonials />
+          {/* <Testimonials /> */}
           <Features />
+          <ForKids />
+          <SafeSection />
           <FAQ />
           <CTABanner />
         </main>

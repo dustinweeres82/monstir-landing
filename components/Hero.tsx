@@ -1,13 +1,36 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import WaitlistModal from "./WaitlistModal";
 
 // Per-layer: gyro max px offset, scroll translateY multiplier
 const GYRO_FACTOR = [5, 10, 18, 28, 38, 52];
 const SCROLL_FACTOR = [0.04, 0.08, 0.14, 0.20, 0.28, 0.38];
 
 export default function Hero() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [showModal, setShowModal] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+      setEmail("");
+      setShowModal(true);
+    } catch {
+      setStatus("error");
+    }
+  };
+
   const sectionRef = useRef<HTMLElement>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null, null, null]);
   const copyRef = useRef<HTMLDivElement>(null);
@@ -142,9 +165,10 @@ export default function Hero() {
           ref={copyRef}
           className="flex flex-col gap-3 md:gap-6 md:max-w-md will-change-transform pt-[100px] md:pt-16 pb-6 md:pb-12"
         >
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold font-mono uppercase tracking-widest text-gray-800">
-              Chore time. Boss time.
+          <div className="flex items-center">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-brand-purple bg-brand-purple/10 text-brand-purple text-xs font-bold font-mono uppercase tracking-widest">
+              <span className="w-2 h-2 rounded-full bg-brand-purple inline-block"></span>
+              Alpha Now Open
             </span>
           </div>
 
@@ -152,23 +176,37 @@ export default function Hero() {
             Turn chores into <span className="text-brand-purple italic">adventures.</span>
           </h1>
 
-          <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-            Kids complete chores,{" "}
-            <span className="font-bold text-brand-purple">earn XP and real rewards</span>
-            , power up their Monstir, and{" "}
-            <span className="font-bold text-gray-900">battle the weekly boss</span>{" "}
-            to unlock epic rewards.
+          <p className="text-[24px] md:text-lg text-gray-700 leading-relaxed font-semibold">
+            Monstir turns your family&apos;s chores into a monster-raising adventure. Kids earn real allowance doing real work and battle a boss every Sunday.
           </p>
 
-          <div>
-            <a
-              href="#waitlist"
-              className="inline-flex items-center gap-2 bg-slime-lime hover:bg-[#c4e020] text-deep-ink font-bold text-base px-7 py-4 rounded-full transition-colors shadow-lg shadow-slime-lime/40 border-2 border-deep-ink"
-            >
-              <span>✦</span>
-              Join the waitlist
-            </a>
+          <div className="flex flex-col gap-3">
+            <form onSubmit={handleSubmit} className="flex items-center rounded-full border-2 border-deep-ink overflow-hidden shadow-lg w-full max-w-md bg-white">
+              <input
+                type="email"
+                required
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 px-5 py-4 bg-white text-gray-900 placeholder-gray-400 font-semibold text-sm outline-none"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="flex items-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-6 py-4 whitespace-nowrap transition-colors disabled:opacity-60 rounded-full m-1"
+              >
+                <span>✦</span>
+                {status === "loading" ? "Joining…" : "Join the waitlist"}
+              </button>
+            </form>
+            {status === "error" && <p className="text-red-600 text-xs">Something went wrong, try again.</p>}
+            <div className="flex items-center gap-5 text-sm text-gray-500 font-medium">
+              <span><span className="text-brand-purple font-bold">✓</span> Free to start</span>
+              <span><span className="text-brand-purple font-bold">✓</span> No credit card</span>
+              <span><span className="text-brand-purple font-bold">✓</span> iOS & Android</span>
+            </div>
           </div>
+          {showModal && <WaitlistModal onClose={() => setShowModal(false)} />}
         </div>
       </div>
 
