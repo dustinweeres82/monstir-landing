@@ -24,7 +24,30 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "Monstir: Chores Today. Legends Tomorrow.",
   description:
-    "Getting kids to do chores without the fight. Kids earn XP and real rewards, power up their Monstir, and battle the weekly boss.",
+    "Monstir turns your family's chores into a monster-raising adventure. Kids earn real allowance doing real work and battle a boss every Sunday.",
+  openGraph: {
+    title: "Monstir: Chores Today. Legends Tomorrow.",
+    description:
+      "Monstir turns your family's chores into a monster-raising adventure. Kids earn real allowance doing real work and battle a boss every Sunday.",
+    url: "https://monstirapp.com",
+    siteName: "Monstir",
+    images: [
+      {
+        url: "https://monstirapp.com/meta-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Monstir – Turn chores into adventures",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Monstir: Chores Today. Legends Tomorrow.",
+    description:
+      "Monstir turns your family's chores into a monster-raising adventure. Kids earn real allowance doing real work and battle a boss every Sunday.",
+    images: ["https://monstirapp.com/meta-image.png"],
+  },
 };
 
 export default function RootLayout({
