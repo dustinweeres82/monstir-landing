@@ -36,7 +36,8 @@ const html = `<!doctype html>
       src: url('/fonts/nunito-latin-700-normal.woff2') format('woff2');
       font-weight: 700; font-style: normal; font-display: swap;
     }
-    :root { --lime:#C5F215; --ink:#1A1A1A; --err:#B3261E; }
+    :root { --lime:#C5F215; --ink:#1A1A1A; --err:#B3261E;
+            --purple:#7B3FF2; --purple-dark:#6230D4; }
     * { box-sizing:border-box; margin:0; }
     body { min-height:100vh; display:grid; place-items:center; padding:24px;
            background:var(--lime); color:var(--ink);
@@ -46,9 +47,11 @@ const html = `<!doctype html>
     p  { font-size:16px; line-height:1.5; color:#3A3A3A; margin-bottom:20px; }
     input { width:100%; background:#fff; border:2px solid var(--ink); border-radius:100px;
             padding:16px 22px; font-size:16px; margin-bottom:12px; font-family:inherit; }
-    button { width:100%; background:var(--ink); color:#fff; border:3px solid var(--ink);
-             border-radius:18px; padding:16px; font-size:17px; font-weight:700; cursor:pointer;
-             font-family:inherit; box-shadow:0 6px 0 0 rgba(0,0,0,0.25); }
+    /* Purple primary button — matches the rest of the landing page. */
+    button { width:100%; background:var(--purple); color:#fff; border:2px solid var(--ink);
+             border-radius:100px; padding:16px; font-size:17px; font-weight:700; cursor:pointer;
+             font-family:inherit; transition:background-color .15s ease; }
+    button:hover { background:var(--purple-dark); }
     button:disabled { opacity:.6; cursor:default; }
     .err { color:var(--err); font-size:14px; font-weight:700; min-height:18px; margin-bottom:8px; }
     [hidden] { display:none; }
