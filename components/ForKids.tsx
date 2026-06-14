@@ -26,7 +26,7 @@ export default function ForKids() {
             For Kids
           </p>
           <h2 className="text-4xl md:text-5xl font-bold font-fredoka text-deep-ink leading-tight mb-4 max-w-xl">
-            A game they actually want to open
+            Now your kids will beg you to do the chores.
           </h2>
           <p className="text-deep-ink/70 text-[18px] max-w-md">
             Not a checklist with stickers. A real game with monsters to raise, bosses to defeat, and trophies to hunt.
