@@ -188,7 +188,7 @@ export default function Hero() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 px-5 py-4 bg-white text-gray-900 placeholder-gray-400 font-semibold text-sm outline-none"
+                className="flex-1 min-w-0 px-5 py-4 bg-white text-gray-900 placeholder-gray-400 font-semibold text-sm outline-none"
               />
               <button
                 type="submit"
