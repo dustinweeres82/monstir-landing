@@ -86,8 +86,10 @@ async function queryPublished(): Promise<Row[] | null> {
       .from("blog_posts")
       .select(SELECT)
       .eq("status", "published")
-      .lte("published_at", new Date().toISOString())
-      .order("published_at", { ascending: false });
+      // Show the post if it has no publish date (published out-of-band) OR its
+      // date has passed — a null date must never hide a published post.
+      .or(`published_at.is.null,published_at.lte.${new Date().toISOString()}`)
+      .order("published_at", { ascending: false, nullsFirst: false });
 
     if (error) return null;
     if (!data || (data.length === 0 && BLOG_SOURCE === "auto")) return null;
@@ -126,7 +128,7 @@ export async function getPublishedPost(slug: string): Promise<Post | null> {
         .select(SELECT)
         .eq("slug", slug)
         .eq("status", "published")
-        .lte("published_at", new Date().toISOString())
+        .or(`published_at.is.null,published_at.lte.${new Date().toISOString()}`)
         .maybeSingle();
       if (!error && data) {
         const r = data as Row;
