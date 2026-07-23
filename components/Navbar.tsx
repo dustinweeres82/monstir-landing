@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -9,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="/" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <Image
             src="/logo-color.png"
             alt="Monstir"
@@ -18,15 +19,23 @@ export default function Navbar() {
             className="object-contain"
             priority
           />
-        </a>
+        </Link>
 
-        <a
-          href="#waitlist"
-          className="hidden md:flex items-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-2.5 rounded-full transition-colors border-2 border-deep-ink"
-        >
-          <span>✦</span>
-          Join the waitlist
-        </a>
+        <div className="hidden md:flex items-center gap-6">
+          <Link
+            href="/blog"
+            className="font-bold text-sm text-gray-700 hover:text-brand-purple transition-colors"
+          >
+            Blog
+          </Link>
+          <a
+            href="#waitlist"
+            className="flex items-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-2.5 rounded-full transition-colors border-2 border-deep-ink"
+          >
+            <span>✦</span>
+            Join the waitlist
+          </a>
+        </div>
 
         <button
           className="md:hidden text-gray-600 p-2"
@@ -47,9 +56,16 @@ export default function Navbar() {
 
       {open && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
+          <Link
+            href="/blog"
+            className="font-bold text-sm text-gray-700 hover:text-brand-purple transition-colors text-center"
+            onClick={() => setOpen(false)}
+          >
+            Blog
+          </Link>
           <a
             href="#waitlist"
-            className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-3 rounded-full transition-colors mt-2 border-2 border-deep-ink"
+            className="flex items-center justify-center gap-2 bg-brand-purple hover:bg-brand-purple-dark text-white font-bold text-sm px-5 py-3 rounded-full transition-colors border-2 border-deep-ink"
             onClick={() => setOpen(false)}
           >
             <span>✦</span>
