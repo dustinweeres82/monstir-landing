@@ -286,6 +286,7 @@ export default function BlogAdmin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState<boolean | null>(null);
+  const [linkSent, setLinkSent] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -319,13 +320,24 @@ export default function BlogAdmin() {
     return () => sub.subscription.unsubscribe();
   }, [load]);
 
-  const signInWithGoogle = async () => {
+  const signInWithMagicLink = async () => {
     setErr(null);
-    const { error } = await sb().auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/blog/admin` },
+    if (!email) {
+      setErr("Enter your email above first.");
+      return;
+    }
+    const { error } = await sb().auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/blog/admin`,
+        shouldCreateUser: false,
+      },
     });
-    if (error) setErr(error.message);
+    if (error) {
+      setErr(error.message);
+      return;
+    }
+    setLinkSent(true);
   };
 
   const signIn = async (e: React.FormEvent) => {
@@ -364,45 +376,67 @@ export default function BlogAdmin() {
         <p className="mb-6 text-sm font-semibold text-gray-500">
           Owner sign-in. Drafts submitted by Pip land here for your review.
         </p>
-        <button
-          onClick={signInWithGoogle}
-          className="mb-4 flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 font-fredoka font-bold text-deep-ink"
-          style={{ border: `2.5px solid ${INK}`, boxShadow: `0px 3px 0px ${INK}` }}
-        >
-          <span>🔑</span> Sign in with Google
-        </button>
-        <div className="mb-4 flex items-center gap-3 text-xs font-semibold text-gray-400">
-          <span className="h-px flex-1 bg-gray-300" /> or email + password{" "}
-          <span className="h-px flex-1 bg-gray-300" />
-        </div>
-        <form onSubmit={signIn} className="flex flex-col gap-3">
-          <input
-            type="email"
-            required
-            placeholder="you@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-deep-ink outline-none"
+
+        {linkSent ? (
+          <div
+            className="rounded-2xl bg-white p-5 text-center"
             style={{ border: `2px solid ${INK}`, boxShadow: `0px 3px 0px ${INK}` }}
-          />
-          <input
-            type="password"
-            required
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-deep-ink outline-none"
-            style={{ border: `2px solid ${INK}`, boxShadow: `0px 3px 0px ${INK}` }}
-          />
-          <button
-            type="submit"
-            className="rounded-full bg-slime-lime px-5 py-3 font-fredoka font-bold text-deep-ink"
-            style={{ border: `3px solid ${INK}`, boxShadow: `0px 4px 0px ${INK}` }}
           >
-            Sign in
-          </button>
-          {err && <p className="text-center text-xs font-semibold text-red-600">{err}</p>}
-        </form>
+            <p className="font-fredoka text-lg font-bold text-deep-ink">Check your email 📬</p>
+            <p className="mt-1 text-sm font-semibold text-gray-500">
+              We sent a sign-in link to <strong>{email}</strong>. Open it in this browser and
+              you&apos;ll land back here signed in.
+            </p>
+            <button
+              onClick={() => setLinkSent(false)}
+              className="mt-3 text-xs font-bold text-brand-purple underline"
+            >
+              Use a different email
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <input
+              type="email"
+              required
+              placeholder="you@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-deep-ink outline-none"
+              style={{ border: `2px solid ${INK}`, boxShadow: `0px 3px 0px ${INK}` }}
+            />
+            <button
+              onClick={signInWithMagicLink}
+              className="rounded-full bg-slime-lime px-5 py-3 font-fredoka font-bold text-deep-ink"
+              style={{ border: `3px solid ${INK}`, boxShadow: `0px 4px 0px ${INK}` }}
+            >
+              ✉️ Email me a sign-in link
+            </button>
+
+            <div className="my-1 flex items-center gap-3 text-xs font-semibold text-gray-400">
+              <span className="h-px flex-1 bg-gray-300" /> or password{" "}
+              <span className="h-px flex-1 bg-gray-300" />
+            </div>
+            <form onSubmit={signIn} className="flex flex-col gap-3">
+              <input
+                type="password"
+                placeholder="Password (if you've set one)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-deep-ink outline-none"
+                style={{ border: `2px solid ${INK}`, boxShadow: `0px 3px 0px ${INK}` }}
+              />
+              <button
+                type="submit"
+                className="rounded-full bg-white px-5 py-3 font-fredoka font-bold text-deep-ink"
+                style={{ border: `2px solid ${INK}` }}
+              >
+                Sign in with password
+              </button>
+            </form>
+            {err && <p className="text-center text-xs font-semibold text-red-600">{err}</p>}
+          </div>
+        )}
       </div>
     );
   }
