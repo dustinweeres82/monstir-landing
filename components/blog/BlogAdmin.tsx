@@ -304,14 +304,29 @@ export default function BlogAdmin() {
   }, []);
 
   useEffect(() => {
-    sb()
-      .auth.getSession()
-      .then(({ data }) => {
-        const ok = !!data.session;
-        setAuthed(ok);
-        if (ok) load();
-      });
+    const client = sb();
+    client.auth.getSession().then(({ data }) => {
+      const ok = !!data.session;
+      setAuthed(ok);
+      if (ok) load();
+    });
+    // Catches the session established after the Google OAuth redirect returns.
+    const { data: sub } = client.auth.onAuthStateChange((_e, session) => {
+      const ok = !!session;
+      setAuthed(ok);
+      if (ok) load();
+    });
+    return () => sub.subscription.unsubscribe();
   }, [load]);
+
+  const signInWithGoogle = async () => {
+    setErr(null);
+    const { error } = await sb().auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/blog/admin` },
+    });
+    if (error) setErr(error.message);
+  };
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -349,6 +364,17 @@ export default function BlogAdmin() {
         <p className="mb-6 text-sm font-semibold text-gray-500">
           Owner sign-in. Drafts submitted by Pip land here for your review.
         </p>
+        <button
+          onClick={signInWithGoogle}
+          className="mb-4 flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 font-fredoka font-bold text-deep-ink"
+          style={{ border: `2.5px solid ${INK}`, boxShadow: `0px 3px 0px ${INK}` }}
+        >
+          <span>🔑</span> Sign in with Google
+        </button>
+        <div className="mb-4 flex items-center gap-3 text-xs font-semibold text-gray-400">
+          <span className="h-px flex-1 bg-gray-300" /> or email + password{" "}
+          <span className="h-px flex-1 bg-gray-300" />
+        </div>
         <form onSubmit={signIn} className="flex flex-col gap-3">
           <input
             type="email"
